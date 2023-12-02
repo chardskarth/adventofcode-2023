@@ -19,3 +19,16 @@ fun String.md5() = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteA
  * The cleaner shorthand for printing output.
  */
 fun Any?.println() = println(this)
+
+fun <T> T.letWhenTrue(predicate: Boolean, block: () -> T): T {
+    return if(predicate) block() else this
+}
+fun Boolean.alsoWhenTrue(block: () -> Unit): Boolean {
+    if(this) block()
+    return this
+}
+
+fun <T> List<T>.alsoForEach(block: (T) -> Unit): List<T> {
+    this.forEach(block)
+    return this
+}
