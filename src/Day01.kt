@@ -14,7 +14,7 @@ fun main() {
                 else -> "${it.first()}${it.last()}"
             }.toInt()
         }.alsoForEach{
-            it.println()
+//            it.println()
         }.sum()
 
     fun part1Try2(input: List<String>) = input
@@ -64,8 +64,25 @@ fun main() {
             part1(it)
         }
 
-    listOf("Day01").forEach { inputFileName ->
-        part1Try4(
+    fun part1Try5(input: List<String>) = input
+        .map(String::lowercase)
+        .map { currentLine ->
+            listOfPairsOfNumbers.map {
+                it to currentLine.indexOf(it.first)
+            }
+                .filter { (_, index) -> index != -1}
+                .sortedByDescending { (_, index) -> index }
+                .map { it.first }
+                .fold(currentLine) { acc, (numberString, number) ->
+                    acc.replace(numberString, number)
+                }
+        }.let {
+//            it.println()
+            part1(it)
+        }
+
+    listOf("Day01_test01","Day01").forEach { inputFileName ->
+        part1Try5(
             readInput(inputFileName)
         ).println()
     }
