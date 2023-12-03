@@ -11,20 +11,21 @@ fun main() {
     )
 
     fun part1(input: List<String>) = input
-        .mapNotNull { currentLine ->
-            with(lineRegex.matchEntire(currentLine)!!) {
-                val allGamesIsValid = groups["games"]!!.value.split(";").map {currentGame ->
-                    mapOfColors.mapValues {(_, colorRegex) ->
+        .mapNotNull {
+            lineRegex.matchEntire(it)
+        }.map { matchResult ->
+            with(matchResult) {
+                val allGamesIsValid = groups["games"]!!.value.split(";").map { currentGame ->
+                    mapOfColors.mapValues { (_, colorRegex) ->
                         colorRegex.find(currentGame, 0)?.groups?.get("number")?.value?.toInt() ?: 0
-                    }.entries.all {(color, numberInGame)  ->
+                    }.entries.all { (color, numberInGame) ->
                         numberInGame <= gameSetOfCubes[color]!!
                     }
                 }.all { it }
-
-                groups["gameNo"]!!.value.toInt().letWhenTrue(!allGamesIsValid) {
-                    null
-                }
+                groups["gameNo"]!!.value.toInt() to allGamesIsValid
             }
+        }.mapNotNull {(gameNo, isAllGamesValid) ->
+            gameNo.letWhenNotTrue(isAllGamesValid) { null }
         }.sum()
 
     readInput("Day02_test1").also {
