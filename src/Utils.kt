@@ -36,3 +36,5 @@ fun <T> List<T>.alsoForEach(block: (T) -> Unit): List<T> {
     this.forEach(block)
     return this
 }
+
+infix fun <A,B, C> Pair<A,B>.andTo(other: C) = Triple(this.first, this.second, other)
